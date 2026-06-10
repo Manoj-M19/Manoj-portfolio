@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manoj M — Full Stack Developer</title>
+  <meta name="description" content="Full Stack Developer. Building fast, scalable web applications." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & BASE ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #000;
+      --white: #fff;
+      --off-white: #f5f5f0;
+      --red: #ff3b2e;
+      --dim: rgba(255,255,255,0.08);
+      --muted: rgba(255,255,255,0.4);
+      --sans: 'Space Grotesk', sans-serif;
+      --mono: 'Space Mono', monospace;
+    }
+    html {
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-x: hidden;
+      cursor: default;
+    }
+    a { color: inherit; text-decoration: none; }
+    ::selection { background: var(--white); color: var(--black); }
+
+    /* ─── CUSTOM CURSOR ─── */
+    .cursor {
+      position: fixed;
+      width: 8px; height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s, width 0.2s, height 0.2s, opacity 0.2s;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.12s ease, width 0.2s, height 0.2s;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 500;
+      height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 28px;
+      mix-blend-mode: difference;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      text-transform: lowercase;
+    }
+    .nav-logo .r {
+      font-size: 9px;
+      vertical-align: super;
+      letter-spacing: 0;
+    }
+    .nav-right {
+      display: flex; align-items: center; gap: 32px;
+    }
+    .nav-right a {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.2s;
+      font-family: var(--mono);
+    }
+    .nav-right a:hover { color: var(--white); }
+
+    /* ─── SLIDES ─── */
+    .slide {
+      scroll-snap-align: start;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* Background layers per slide */
+    .slide-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+
+    /* Slide 1 — Hero */
+    .slide-hero .slide-bg {
+      background: var(--black);
+    }
+    .slide-hero .slide-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(255,255,255,0.04) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px);
+    }
+    .slide-hero .hero-big {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--mono);
+      font-size: clamp(80px, 14vw, 200px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      text-align: center;
+      color: rgba(255,255,255,0.06);
+      text-transform: uppercase;
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      z-index: 1;
+    }
+
+    /* Slide 2 — FlagFeature */
+    .slide-flag .slide-bg {
+      background: #050508;
+    }
+    .slide-flag .slide-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 50% 70% at 75% 30%, rgba(80,60,220,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 40% at 20% 70%, rgba(50,40,180,0.1) 0%, transparent 50%);
+    }
+    .slide-flag .slide-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.025) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.025) 40px);
+    }
+    .slide-flag .art {
+      position: absolute;
+      right: 8%; top: 50%;
+      transform: translateY(-50%);
+      z-index: 1;
+      opacity: 0.25;
+    }
+
+    /* Slide 3 — Flux */
+    .slide-flux .slide-bg {
+      background: #040608;
+    }
+    .slide-flux .slide-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 60% at 65% 40%, rgba(0,200,150,0.1) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 50% at 30% 60%, rgba(0,150,200,0.08) 0%, transparent 55%);
+    }
+
+    /* Slide 4 — FinTrack */
+    .slide-fin .slide-bg {
+      background: #060505;
+    }
+    .slide-fin .slide-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 65% at 70% 35%, rgba(220,50,50,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 35% 45% at 25% 65%, rgba(180,30,30,0.07) 0%, transparent 50%);
+    }
+
+    /* Slide 5 — About */
+    .slide-about .slide-bg {
+      background: #080808;
+    }
+
+    /* ─── SLIDE CONTENT ─── */
+    .slide-content {
+      position: relative; z-index: 10;
+      padding: 0 28px 40px;
+    }
+
+    /* bottom gradient scrim for text readability */
+    .slide::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: 0;
+      height: 55%;
+      background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 100%);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .slide-hero::after { display: none; }
+
+    .slide-eyebrow {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .slide-product-name {
+      font-family: var(--mono);
+      font-size: clamp(22px, 4vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 10px;
+      text-transform: lowercase;
+    }
+    .slide-product-name .paren { color: var(--muted); font-weight: 400; }
+
+    .slide-tagline {
+      font-size: 13px;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.03em;
+      margin-bottom: 24px;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    .slide-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--white);
+      border-bottom: 1px solid rgba(255,255,255,0.35);
+      padding-bottom: 3px;
+      transition: border-color 0.2s, gap 0.2s;
+    }
+    .slide-cta:hover { gap: 14px; border-color: var(--white); }
+    .slide-cta::after { content: '→'; font-size: 12px; }
+
+    .slide-cta-row {
+      display: flex; gap: 28px; align-items: center;
+    }
+
+    /* ─── HERO SLIDE SPECIFIC ─── */
+    .slide-hero .slide-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding-bottom: 52px;
+    }
+    .hero-status {
+      display: flex; align-items: center; gap: 8px;
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 20px;
+    }
+    .hero-status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #4ade80;
+      animation: breathe 2.4s ease-in-out infinite;
+    }
+    @keyframes breathe { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero-name {
+      font-family: var(--mono);
+      font-size: clamp(36px, 6vw, 72px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 8px;
+      text-transform: lowercase;
+    }
+    .hero-name .paren { color: var(--muted); font-weight: 400; }
+
+    .hero-role {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      margin-bottom: 32px;
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px; right: 28px;
+      z-index: 20;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 8px;
+    }
+    .scroll-hint span {
+      font-family: var(--mono);
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted);
+      writing-mode: vertical-rl;
+    }
+    .scroll-line {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, transparent, var(--muted));
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDown { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+    /* ─── SLIDE NUMBER ─── */
+    .slide-num {
+      position: absolute;
+      right: 28px; bottom: 40px;
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.15em; color: var(--muted);
+      z-index: 20;
+    }
+
+    /* ─── ABOUT SLIDE ─── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      padding: 100px 28px 80px;
+    }
+    .about-slide-left {}
+    .about-slide-right {}
+    .about-label {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 24px;
+    }
+    .about-heading {
+      font-family: var(--mono);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: 28px;
+      text-transform: lowercase;
+    }
+    .about-heading .paren { color: var(--muted); font-weight: 400; }
+    .about-bio {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.85;
+      margin-bottom: 36px;
+    }
+    .about-bio strong { color: var(--white); font-weight: 500; }
+
+    .about-stats {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--dim); border: 1px solid var(--dim);
+    }
+    .astat {
+      padding: 20px 18px;
+      background: var(--black);
+    }
+    .astat-num {
+      font-family: var(--mono);
+      font-size: 36px; font-weight: 700;
+      color: var(--white); line-height: 1;
+      margin-bottom: 4px;
+    }
+    .astat-num sup { font-size: 16px; color: var(--muted); }
+    .astat-label {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .fact-table { display: flex; flex-direction: column; margin-bottom: 32px; }
+    .fact-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 13px 0; border-bottom: 1px solid var(--dim);
+      font-size: 12px;
+    }
+    .fact-k {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .fact-v { color: var(--white); font-size: 12px; }
+    .fact-v.live { color: #4ade80; }
+
+    .about-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .about-link {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      padding: 9px 18px;
+      border: 1px solid var(--dim);
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+    .about-link:hover { border-color: var(--white); color: var(--white); }
+
+    /* ─── CATEGORY / SKILLS BAR ─── */
+    .cat-bar {
+      scroll-snap-align: start;
+      background: var(--black);
+      border-top: 1px solid var(--dim);
+      border-bottom: 1px solid var(--dim);
+      overflow: hidden;
+      position: relative;
+      height: 52px;
+    }
+    .cat-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+      height: 100%;
+      align-items: center;
+    }
+    .cat-track:hover { animation-play-state: paused; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .cat-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 0 28px; height: 100%;
+      border-right: 1px solid var(--dim);
+      white-space: nowrap; flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .cat-item:hover { background: rgba(255,255,255,0.04); }
+    .cat-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+    .cat-item:hover .cat-dot { background: var(--white); }
+    .cat-name {
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); transition: color 0.2s;
+    }
+    .cat-item:hover .cat-name { color: var(--white); }
+
+    /* ─── FOOTER ─── */
+    .footer-slide {
+      scroll-snap-align: start;
+      background: var(--black);
+      border-top: 1px solid var(--dim);
+      padding: 56px 28px 40px;
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      min-height: auto;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 48px;
+      border-bottom: 1px solid var(--dim);
+      margin-bottom: 32px;
+    }
+    .footer-brand {
+      font-family: var(--mono);
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      text-transform: lowercase;
+      margin-bottom: 12px;
+    }
+    .footer-brand .r { font-size: 10px; vertical-align: super; }
+    .footer-brand-sub {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 240px;
+    }
+    .footer-col h4 {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a {
+      font-size: 12px; color: rgba(255,255,255,0.5);
+      transition: color 0.2s; display: block;
+    }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--muted);
+    }
+    .footer-back {
+      font-family: var(--mono);
+      font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); border-bottom: 1px solid var(--dim);
+      padding-bottom: 2px; transition: all 0.2s;
+    }
+    .footer-back:hover { color: var(--white); border-color: var(--white); }
+
+    /* ─── SVG ART ─── */
+    .art-grid-svg { display: block; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-right a { display: none; }
+      .nav-right a:last-child { display: block; }
+      .about-grid { grid-template-columns: 1fr; gap: 40px; padding: 80px 20px 60px; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .slide-content { padding: 0 20px 36px; }
+      .slide-product-name { font-size: clamp(18px, 6vw, 32px); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">manoj <span class="r">(M)</span></div>
+  <div class="nav-right">
+    <a href="#about">About</a>
+    <a href="#projects">Work</a>
+    <a href="#skills">Stack</a>
+    <a href="mailto:manoj@email.com">Contact</a>
+  </div>
+</nav>
+
+<!-- ══ SLIDE 1 — HERO ══ -->
+<section class="slide slide-hero" id="home">
+  <div class="slide-bg"></div>
+
+  <!-- large background text -->
+  <div class="hero-big">MANOJ</div>
+
+  <div class="slide-content" style="position:relative;z-index:10;">
+    <div class="hero-status">
+      <div class="hero-status-dot"></div>
+      Available for work — Bengaluru, IN
+    </div>
+    <h1 class="hero-name">
+      manoj <span class="paren">( M )</span>
+    </h1>
+    <p class="hero-role">Full Stack Developer</p>
+    <div class="slide-cta-row">
+      <a href="#projects" class="slide-cta">View Work</a>
+      <a href="mailto:manoj@email.com" class="slide-cta">Let's Connect</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ SLIDE 2 — FLAGFEATURE ══ -->
+<section class="slide slide-flag" id="projects">
+  <div class="slide-bg"></div>
+
+  <!-- CSS Art: grid of squares -->
+  <div class="art" style="position:absolute;right:6%;top:50%;transform:translateY(-50%);z-index:1;opacity:0.18;">
+    <svg width="340" height="340" viewBox="0 0 340 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="flag-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+          <rect x="2" y="2" width="36" height="36" rx="2" stroke="white" stroke-width="0.7" fill="none"/>
+        </pattern>
+      </defs>
+      <rect width="340" height="340" fill="url(#flag-grid)"/>
+      <rect x="42" y="42" width="116" height="116" rx="4" fill="white" opacity="0.06"/>
+      <rect x="42" y="42" width="116" height="116" rx="4" stroke="white" stroke-width="1"/>
+      <rect x="82" y="82" width="36" height="36" rx="2" fill="white" opacity="0.2"/>
+      <circle cx="250" cy="90" r="30" stroke="white" stroke-width="0.8" fill="none"/>
+      <circle cx="250" cy="90" r="6" fill="white" opacity="0.5"/>
+      <line x1="220" y1="90" x2="280" y2="90" stroke="white" stroke-width="0.6" stroke-dasharray="3 3"/>
+      <line x1="250" y1="60" x2="250" y2="120" stroke="white" stroke-width="0.6" stroke-dasharray="3 3"/>
+    </svg>
+  </div>
+
+  <div class="slide-content" style="position:relative;z-index:10;">
+    <div class="slide-eyebrow">Full-Stack Platform · 01</div>
+    <h2 class="slide-product-name">
+      flagfeature <span class="paren">( flag )</span>
+    </h2>
+    <p class="slide-tagline">
+      Manage and roll out features with precision.<br>
+      Role-based control, percentage rollouts, audit logs, REST API.
+    </p>
+    <div class="slide-cta-row">
+      <a href="#" class="slide-cta">Live</a>
+      <a href="#" class="slide-cta">GitHub</a>
+    </div>
+  </div>
+  <div class="slide-num">01 / 03</div>
+</section>
+
+<!-- ══ SLIDE 3 — FLUX WORKSPACE ══ -->
+<section class="slide slide-flux">
+  <div class="slide-bg"></div>
+
+  <!-- CSS Art: flow/wave pattern -->
+  <div style="position:absolute;right:5%;top:50%;transform:translateY(-50%);z-index:1;opacity:0.15;">
+    <svg width="360" height="300" viewBox="0 0 360 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 150 Q90 80 160 150 T300 150" stroke="white" stroke-width="1" fill="none"/>
+      <path d="M20 170 Q90 100 160 170 T300 170" stroke="white" stroke-width="0.7" fill="none"/>
+      <path d="M20 190 Q90 120 160 190 T300 190" stroke="white" stroke-width="0.5" fill="none"/>
+      <path d="M20 130 Q90 60 160 130 T300 130" stroke="white" stroke-width="0.7" fill="none"/>
+      <circle cx="160" cy="150" r="18" stroke="white" stroke-width="1" fill="none"/>
+      <circle cx="160" cy="150" r="5" fill="white" opacity="0.6"/>
+      <rect x="40" y="60" width="80" height="50" rx="3" stroke="white" stroke-width="0.8" fill="none" opacity="0.5"/>
+      <text x="80" y="80" text-anchor="middle" fill="white" font-size="9" font-family="monospace" opacity="0.8">AI</text>
+      <text x="80" y="96" text-anchor="middle" fill="white" font-size="7" font-family="monospace" opacity="0.5">workspace</text>
+      <line x1="80" y1="110" x2="160" y2="132" stroke="white" stroke-width="0.6" stroke-dasharray="4 3"/>
+      <circle cx="280" cy="200" r="40" stroke="white" stroke-width="0.6" fill="none" opacity="0.4"/>
+      <circle cx="280" cy="200" r="25" stroke="white" stroke-width="0.6" fill="none" opacity="0.3"/>
+    </svg>
+  </div>
+
+  <div class="slide-content" style="position:relative;z-index:10;">
+    <div class="slide-eyebrow">AI Collaborative App · 02</div>
+    <h2 class="slide-product-name">
+      flux workspace <span class="paren">( flux )</span>
+    </h2>
+    <p class="slide-tagline">
+      Real-time editing. AI-assisted writing. WebSocket sync.<br>
+      A collaborative space built to move at the speed of thought.
+    </p>
+    <div class="slide-cta-row">
+      <a href="#" class="slide-cta">Live</a>
+      <a href="#" class="slide-cta">GitHub</a>
+    </div>
+  </div>
+  <div class="slide-num">02 / 03</div>
+</section>
+
+<!-- ══ SLIDE 4 — FINTRACK ══ -->
+<section class="slide slide-fin">
+  <div class="slide-bg"></div>
+
+  <!-- CSS Art: chart/graph pattern -->
+  <div style="position:absolute;right:6%;top:50%;transform:translateY(-50%);z-index:1;opacity:0.18;">
+    <svg width="320" height="280" viewBox="0 0 320 280" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- axes -->
+      <line x1="40" y1="240" x2="300" y2="240" stroke="white" stroke-width="0.8"/>
+      <line x1="40" y1="40" x2="40" y2="240" stroke="white" stroke-width="0.8"/>
+      <!-- bars -->
+      <rect x="60" y="160" width="30" height="80" rx="2" fill="white" opacity="0.12"/>
+      <rect x="60" y="160" width="30" height="80" rx="2" stroke="white" stroke-width="0.6"/>
+      <rect x="110" y="120" width="30" height="120" rx="2" fill="white" opacity="0.12"/>
+      <rect x="110" y="120" width="30" height="120" rx="2" stroke="white" stroke-width="0.6"/>
+      <rect x="160" y="80" width="30" height="160" rx="2" fill="white" opacity="0.2"/>
+      <rect x="160" y="80" width="30" height="160" rx="2" stroke="white" stroke-width="1"/>
+      <rect x="210" y="100" width="30" height="140" rx="2" fill="white" opacity="0.12"/>
+      <rect x="210" y="100" width="30" height="140" rx="2" stroke="white" stroke-width="0.6"/>
+      <rect x="260" y="140" width="30" height="100" rx="2" fill="white" opacity="0.12"/>
+      <rect x="260" y="140" width="30" height="100" rx="2" stroke="white" stroke-width="0.6"/>
+      <!-- trend line -->
+      <polyline points="75,160 125,120 175,80 225,100 275,140" stroke="white" stroke-width="1" fill="none" stroke-dasharray="4 2" opacity="0.6"/>
+      <!-- grid lines -->
+      <line x1="40" y1="200" x2="300" y2="200" stroke="white" stroke-width="0.3" stroke-dasharray="3 3" opacity="0.3"/>
+      <line x1="40" y1="160" x2="300" y2="160" stroke="white" stroke-width="0.3" stroke-dasharray="3 3" opacity="0.3"/>
+      <line x1="40" y1="120" x2="300" y2="120" stroke="white" stroke-width="0.3" stroke-dasharray="3 3" opacity="0.3"/>
+    </svg>
+  </div>
+
+  <div class="slide-content" style="position:relative;z-index:10;">
+    <div class="slide-eyebrow">Backend REST API · 03</div>
+    <h2 class="slide-product-name">
+      fintrack api <span class="paren">( fin )</span>
+    </h2>
+    <p class="slide-tagline">
+      Expense management with JWT auth, Redis background tasks,<br>
+      monthly analytics, CSV export — containerized with Docker.
+    </p>
+    <div class="slide-cta-row">
+      <a href="#" class="slide-cta">GitHub</a>
+    </div>
+  </div>
+  <div class="slide-num">03 / 03</div>
+</section>
+
+<!-- ══ SKILLS BAR ══ -->
+<div class="cat-bar" id="skills">
+  <div class="cat-track" id="catTrack"></div>
+</div>
+
+<!-- ══ SLIDE 5 — ABOUT ══ -->
+<section class="slide slide-about" id="about" style="height:auto;scroll-snap-align:start;">
+  <div class="slide-bg"></div>
+  <div class="about-grid" style="position:relative;z-index:1;">
+    <div class="about-slide-left">
+      <div class="about-label">自己紹介 — About Me</div>
+      <h2 class="about-heading">
+        I'm manoj,<br>a <span style="color:rgba(255,255,255,0.35);">(</span> full-stack <span style="color:rgba(255,255,255,0.35);">)</span><br>developer
+      </h2>
+      <p class="about-bio">
+        I build <strong>production-ready software</strong> across the full stack — from pixel-sharp frontends to robust backend APIs and cloud infrastructure. Based in Bengaluru, I ship fast and ship right.<br><br>
+        Currently completing my <strong>BE in Computer Science</strong> at Sambhram Institute of Technology, graduating May 2026.
+      </p>
+      <div class="about-stats">
+        <div class="astat">
+          <div class="astat-num">3<sup>+</sup></div>
+          <div class="astat-label">Projects</div>
+        </div>
+        <div class="astat">
+          <div class="astat-num">14<sup>+</sup></div>
+          <div class="astat-label">Technologies</div>
+        </div>
+        <div class="astat">
+          <div class="astat-num">1<sup>x</sup></div>
+          <div class="astat-label">Hackathon Select</div>
+        </div>
+        <div class="astat">
+          <div class="astat-num">∞</div>
+          <div class="astat-label">Curiosity</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="about-slide-right">
+      <div class="about-label" style="margin-bottom:24px;">詳細 — Details</div>
+      <div class="fact-table">
+        <div class="fact-row">
+          <span class="fact-k">Status</span>
+          <span class="fact-v live">▸ Open to Roles</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Location</span>
+          <span class="fact-v">Bengaluru, India</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Degree</span>
+          <span class="fact-v">BE Computer Science</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Graduating</span>
+          <span class="fact-v">May 2026</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Availability</span>
+          <span class="fact-v">Remote &amp; On-site</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Hackathon</span>
+          <span class="fact-v">Solana Hacker House '24</span>
+        </div>
+        <div class="fact-row">
+          <span class="fact-k">Focus</span>
+          <span class="fact-v">Full-Stack · APIs · Cloud</span>
+        </div>
+      </div>
+      <div class="about-links">
+        <a href="https://github.com/manoj" target="_blank" class="about-link">GitHub</a>
+        <a href="https://linkedin.com/in/manoj" target="_blank" class="about-link">LinkedIn</a>
+        <a href="mailto:manoj@email.com" class="about-link">Email</a>
+        <a href="#" class="about-link">Resume</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer-slide">
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">manoj <span class="r">(M)</span></div>
+      <p class="footer-brand-sub">
+        Full-stack developer. Building digital experiences where design meets robust engineering.
+      </p>
+    </div>
+    <div class="footer-col">
+      <h4>General</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#projects">Work</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Specifics</h4>
+      <ul>
+        <li><a href="#">Resume</a></li>
+        <li><a href="#skills">Stack</a></li>
+        <li><a href="mailto:manoj@email.com">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Socials</h4>
+      <ul>
+        <li><a href="https://github.com/manoj" target="_blank">GitHub</a></li>
+        <li><a href="https://linkedin.com/in/manoj" target="_blank">LinkedIn</a></li>
+        <li><a href="mailto:manoj@email.com">Email</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2026 Manoj M — All rights reserved</span>
+    <a href="#home" class="footer-back">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+  /* ── Custom cursor ── */
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  function animCursor() {
+    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    curR.style.left = rx + 'px'; curR.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cur.style.width = '14px'; cur.style.height = '14px';
+      curR.style.width = '52px'; curR.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cur.style.width = '8px'; cur.style.height = '8px';
+      curR.style.width = '36px'; curR.style.height = '36px';
+    });
+  });
+
+  /* ── Skills marquee ── */
+  const skills = [
+    'JavaScript','TypeScript','Python','React.js','Next.js',
+    'Node.js','Express.js','Hono.js','FastAPI','PostgreSQL',
+    'MongoDB','Redis','Prisma','SQLAlchemy','Docker',
+    'AWS S3','AWS EC2','Vercel','Railway','Cloudflare',
+    'WebSockets','CI/CD','Tailwind CSS','Framer Motion','Git'
+  ];
+  const track = document.getElementById('catTrack');
+  const doubled = [...skills, ...skills];
+  doubled.forEach(s => {
+    const item = document.createElement('div');
+    item.className = 'cat-item';
+    item.innerHTML = `<div class="cat-dot"></div><span class="cat-name">${s}</span>`;
+    track.appendChild(item);
+  });
+
+  /* ── Slide active nav highlight ── */
+  const slides = document.querySelectorAll('.slide[id]');
+  const navAs = document.querySelectorAll('.nav-right a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navAs.forEach(a => {
+          a.style.color = a.getAttribute('href') === '#' + e.target.id
+            ? 'rgba(255,255,255,0.9)' : '';
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+  slides.forEach(s => obs.observe(s));
+</script>
+</body>
+</html>
